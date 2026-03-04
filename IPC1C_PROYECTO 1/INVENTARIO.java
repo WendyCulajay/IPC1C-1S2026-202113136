@@ -1,4 +1,4 @@
-// WENDY
+// WENDY culajay...
 
 public class INVENTARIO{
     
