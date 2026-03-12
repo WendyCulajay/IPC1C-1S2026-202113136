@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>Eliminar Producto</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f6f8;
+}
+
+.contenedor{
+width:500px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0px 0px 10px gray;
+margin-top:60px;
+}
+
+input{
+width:100%;
+padding:8px;
+margin:5px 0 15px 0;
+}
+
+button{
+width:100%;
+padding:10px;
+background:#c0392b;
+color:white;
+border:none;
+border-radius:5px;
+font-size:16px;
+cursor:pointer;
+}
+
+.atras{
+background:gray;
+margin-top:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="contenedor">
+
+<h2>Eliminar Producto</h2>
+
+<label>Código del Producto</label>
+<input type="text" id="codigo">
+
+<button onclick="eliminarProducto()">Eliminar Producto</button>
+
+<button class="atras" onclick="location.href='index.html'">
+⬅ Volver al menú
+</button>
+
+</div>
+
+<script>
+
+function eliminarProducto(){
+
+let codigo = document.getElementById("codigo").value;
+
+let productos = JSON.parse(localStorage.getItem("productos")) || [];
+
+let nuevoArreglo = [];
+let eliminado = false;
+
+for(let i=0;i<productos.length;i++){
+
+if(productos[i].codigo == codigo){
+
+eliminado = true;
+
+}else{
+
+nuevoArreglo.push(productos[i]);
+
+}
+
+}
+
+if(eliminado){
+
+localStorage.setItem("productos", JSON.stringify(nuevoArreglo));
+
+alert("Producto eliminado correctamente");
+
+window.location.href="index.html";
+
+}else{
+
+alert("Producto no encontrado");
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>Agregar Producto</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f6f8;
+}
+
+.contenedor{
+width:500px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0px 0px 10px gray;
+margin-top:60px;
+}
+
+input{
+width:100%;
+padding:8px;
+margin:5px 0 15px 0;
+}
+
+button{
+width:100%;
+padding:10px;
+background:#901fb2;
+color:white;
+border:none;
+border-radius:5px;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#4f1591;
+}
+
+.atras{
+background:gray;
+margin-top:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="contenedor">
+
+<h2>Agregar Producto</h2>
+
+<label>Código del Producto</label>
+<input type="text" id="codigo">
+
+<label>Nombre del Producto</label>
+<input type="text" id="nombre">
+
+<label>Categoría</label>
+<input type="text" id="categoria">
+
+<label>Precio</label>
+<input type="number" id="precio">
+
+<label>Cantidad en Stock</label>
+<input type="number" id="stock">
+
+<button onclick="agregarProducto()">
+Agregar Producto
+</button>
+
+<button class="atras" onclick="location.href='index.html'">
+⬅ Volver al menú
+</button>
+
+</div>
+
+<script>
+
+function agregarProducto(){
+
+let codigo = document.getElementById("codigo").value.trim();
+let nombre = document.getElementById("nombre").value.trim();
+let categoria = document.getElementById("categoria").value.trim();
+let precio = parseFloat(document.getElementById("precio").value);
+let stock = parseInt(document.getElementById("stock").value);
+
+if(codigo=="" || nombre=="" || categoria=="" || isNaN(precio) || isNaN(stock)){
+alert("Debe completar todos los campos");
+return;
+}
+
+if(precio <= 0){
+alert("El precio debe ser mayor que 0");
+return;
+}
+
+if(stock < 0){
+alert("La cantidad no puede ser negativa");
+return;
+}
+
+let productos = JSON.parse(localStorage.getItem("productos")) || [];
+
+/* validar código repetido */
+for(let i=0;i<productos.length;i++){
+
+if(productos[i].codigo.toLowerCase() == codigo.toLowerCase()){
+
+alert("Ese código ya existe. Intente otro.");
+return;
+
+}
+
+}
+
+/* crear producto */
+let producto = {
+
+codigo: codigo,
+nombre: nombre,
+categoria: categoria,
+precio: precio,
+stock: stock
+
+};
+
+/* agregar producto (equivalente a contadorProductos++) */
+productos.push(producto);
+
+/* guardar */
+localStorage.setItem("productos", JSON.stringify(productos));
+
+alert("Producto agregado correctamente");
+
+window.location.href="index.html";
+
+}
+
+</script>
+
+</body>
+</html>

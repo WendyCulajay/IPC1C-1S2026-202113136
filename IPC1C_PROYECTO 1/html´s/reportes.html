@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>Reportes</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f6f8;
+text-align:center;
+}
+
+.contenedor{
+width:500px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0px 0px 10px gray;
+margin-top:60px;
+}
+
+button{
+width:100%;
+padding:12px;
+margin:10px 0;
+background:#701fb2;
+color:white;
+border:none;
+border-radius:6px;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#4b1591;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="contenedor">
+
+<h2>Generar Reportes</h2>
+
+<button onclick="reporteStock()">
+Generar Reporte de Stock
+</button>
+
+<button onclick="reporteVentas()">
+Generar Reporte de Ventas
+</button>
+
+<button onclick="location.href='index.html'">
+⬅ Volver al menú
+</button>
+
+</div>
+
+<script>
+
+/* =========================
+   REPORTE DE STOCK
+========================= */
+
+function reporteStock(){
+
+let productos = JSON.parse(localStorage.getItem("productos")) || [];
+
+let fecha = new Date();
+
+let nombreArchivo =
+fecha.getDate()+"_"+(fecha.getMonth()+1)+"_"+fecha.getFullYear()+"_"+
+fecha.getHours()+"_"+fecha.getMinutes()+"_"+fecha.getSeconds()+"_Stock.html";
+
+let contenido = `
+<html>
+<head>
+<title>Reporte de Stock</title>
+</head>
+
+<body>
+
+<h2>Reporte de Stock</h2>
+
+<table border="1">
+
+<tr>
+<th>Nombre</th>
+<th>Código</th>
+<th>Categoría</th>
+<th>Precio</th>
+<th>Cantidad</th>
+</tr>
+`;
+
+for(let i=0;i<productos.length;i++){
+
+contenido += `
+<tr>
+<td>${productos[i].nombre}</td>
+<td>${productos[i].codigo}</td>
+<td>${productos[i].categoria}</td>
+<td>${productos[i].precio}</td>
+<td>${productos[i].stock}</td>
+</tr>
+`;
+
+}
+
+contenido += `
+</table>
+
+</body>
+</html>
+`;
+
+let archivo = new Blob([contenido], {type:"text/html"});
+
+let link = document.createElement("a");
+
+link.href = URL.createObjectURL(archivo);
+
+link.download = nombreArchivo;
+
+link.click();
+
+}
+
+
+
+/* =========================
+   REPORTE DE VENTAS
+========================= */
+
+function reporteVentas(){
+
+let ventas = JSON.parse(localStorage.getItem("ventas")) || [];
+
+let fecha = new Date();
+
+let nombreArchivo =
+fecha.getDate()+"_"+(fecha.getMonth()+1)+"_"+fecha.getFullYear()+"_"+
+fecha.getHours()+"_"+fecha.getMinutes()+"_"+fecha.getSeconds()+"_Venta.html";
+
+let contenido = `
+<html>
+
+<head>
+<title>Reporte de Ventas</title>
+</head>
+
+<body>
+
+<h2>Reporte de Ventas</h2>
+
+<table border="1">
+
+<tr>
+<th>Producto</th>
+<th>Código</th>
+<th>Cantidad</th>
+<th>Total</th>
+<th>Fecha</th>
+</tr>
+`;
+
+for(let i=0;i<ventas.length;i++){
+
+contenido += `
+<tr>
+<td>${ventas[i].nombre}</td>
+<td>${ventas[i].codigo}</td>
+<td>${ventas[i].cantidad}</td>
+<td>${ventas[i].total}</td>
+<td>${ventas[i].fecha || "Sin fecha registrada"}</td>
+</tr>
+`;
+
+}
+
+contenido += `
+</table>
+
+</body>
+</html>
+`;
+
+let archivo = new Blob([contenido], {type:"text/html"});
+
+let link = document.createElement("a");
+
+link.href = URL.createObjectURL(archivo);
+
+link.download = nombreArchivo;
+
+link.click();
+
+}
+
+</script>
+
+</body>
+</html>

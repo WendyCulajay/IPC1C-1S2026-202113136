@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>Registrar Venta</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f6f8;
+}
+
+.contenedor{
+width:500px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0px 0px 10px gray;
+margin-top:60px;
+}
+
+input{
+width:100%;
+padding:8px;
+margin:5px 0 15px 0;
+}
+
+button{
+width:100%;
+padding:10px;
+background:#27ae60;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+.atras{
+background:gray;
+margin-top:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="contenedor">
+
+<h2>Registrar Venta</h2>
+
+<label>Código del Producto</label>
+<input type="text" id="codigo">
+
+<label>Cantidad</label>
+<input type="number" id="cantidad">
+
+<button onclick="registrarVenta()">
+Registrar Venta
+</button>
+
+<button class="atras" onclick="location.href='index.html'">
+⬅ Volver al menú
+</button>
+
+</div>
+
+<script>
+
+function registrarVenta(){
+
+let codigo = document.getElementById("codigo").value.trim();
+let cantidad = parseInt(document.getElementById("cantidad").value);
+
+if(codigo=="" || isNaN(cantidad)){
+alert("Debe ingresar código y cantidad");
+return;
+}
+
+let productos = JSON.parse(localStorage.getItem("productos")) || [];
+let ventas = JSON.parse(localStorage.getItem("ventas")) || [];
+
+let encontrado = false;
+
+for(let i=0;i<productos.length;i++){
+
+if(productos[i].codigo.toLowerCase() == codigo.toLowerCase()){
+
+encontrado = true;
+
+if(cantidad <= 0){
+alert("La cantidad debe ser mayor que 0");
+return;
+}
+
+if(cantidad > productos[i].stock){
+alert("No puede vender más de lo que hay en stock (" + productos[i].stock + ")");
+return;
+}
+
+productos[i].stock -= cantidad;
+
+let total = cantidad * productos[i].precio;
+
+let fecha = new Date().toLocaleString();
+
+let venta = {
+
+codigo: productos[i].codigo,
+nombre: productos[i].nombre,
+cantidad: cantidad,
+total: total,
+fecha: fecha
+
+};
+
+ventas.push(venta);
+
+localStorage.setItem("productos", JSON.stringify(productos));
+localStorage.setItem("ventas", JSON.stringify(ventas));
+
+alert("Venta realizada correctamente\nTotal: Q" + total);
+
+window.location.href="index.html";
+
+return;
+
+}
+
+}
+
+if(!encontrado){
+
+alert("Producto no encontrado");
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

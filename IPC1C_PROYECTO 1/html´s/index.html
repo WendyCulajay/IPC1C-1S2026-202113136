@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>Menú Principal</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#ffffff;
+text-align:center;
+}
+
+.contenedor{
+width:400px;
+margin:auto;
+background:rgb(228, 182, 250);
+padding:20px;
+border-radius:10px;
+box-shadow:0px 0px 10px gray;
+margin-top:80px;
+}
+
+button{
+width:100%;
+padding:12px;
+margin:8px 0;
+background:#901fb2;
+color:white;
+border:none;
+border-radius:6px;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#91158b;
+}
+
+.reiniciar{
+background:#363438;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="contenedor">
+
+<h2>Sistema de Inventario</h2>
+
+<button onclick="location.href='agregar.html'">
+1. Agregar Producto
+</button>
+
+<button onclick="location.href='buscar.html'">
+2. Buscar Producto
+</button>
+
+<button onclick="location.href='eliminar.html'">
+3. Eliminar Producto
+</button>
+
+<button onclick="location.href='venta.html'">
+4. Registrar Venta
+</button>
+
+<button onclick="location.href='reportes.html'">
+5. Generar Reportes
+</button>
+
+<button onclick="location.href='estudiante.html'">
+6. Ver Datos del Estudiante
+</button>
+
+<button class="reiniciar" onclick="reiniciarSistema()">
+Reiniciar Sistema
+</button>
+
+</div>
+
+<script>
+
+function reiniciarSistema(){
+
+if(confirm("¿Seguro que desea borrar todos los productos y ventas?")){
+
+localStorage.removeItem("productos");
+localStorage.removeItem("ventas");
+
+alert("Sistema reiniciado");
+
+location.reload();
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
