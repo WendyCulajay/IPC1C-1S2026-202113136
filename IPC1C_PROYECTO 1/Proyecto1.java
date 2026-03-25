@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.time.LocalDateTime;
 
 public class Proyecto1 {
 
@@ -248,6 +249,7 @@ public class Proyecto1 {
     }
 
     // ================= VENTA =================
+    
     public static void registrarVenta() {
 
     System.out.print("Ingrese código del producto: ");
@@ -262,6 +264,7 @@ public class Proyecto1 {
             do {
                 System.out.print("Cantidad a vender: ");
                 cantidad = sc.nextInt();
+                
 
                 if (cantidad <= 0) {
                     System.out.println("La cantidad debe ser mayor que 0.");
@@ -278,9 +281,10 @@ public class Proyecto1 {
 
             double total = cantidad * precios[i];
 
+
             System.out.println("Venta realizada correctamente.");
             System.out.println("Total de la venta: Q" + total);
-
+            
             return;
         }
     }
