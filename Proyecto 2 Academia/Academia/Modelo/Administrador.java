@@ -1,13 +1,13 @@
 package Modelo;
 
-public class Administrador extends Usuario {
+import java.io.Serializable;
 
-    public Administrador(String codigo, String nombre, String password, String fechaNacimiento, String genero) {
-        super(codigo, nombre, password, fechaNacimiento, genero);
+public class Administrador extends Usuario implements Serializable {
+
+    public Administrador(String codigo, String nombre, String password) {
+        // El rol siempre será "Administrador"
+        super(codigo, nombre, password, "Administrador");
     }
 
-    @Override
-    public String getRol() {
-        return "Administrador";
-    }
+
 }

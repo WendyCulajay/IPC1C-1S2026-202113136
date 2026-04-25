@@ -1,36 +1,69 @@
 package Vista;
 
+import Controlador.Sistema;
 import Modelo.Usuario;
+
 import javax.swing.*;
 import java.awt.*;
 
-// Ventana para el estudiante
 public class MenuEstudiante extends JFrame {
 
-    public MenuEstudiante(Usuario usuario) {
+    private final Sistema sistema;
+    private final Usuario estudiante;
+    private final Color rosado = new Color(216, 112, 147); 
+    private final Color grisTexto = new Color(112, 128, 144);
 
-        Color fondoBlanco = Color.WHITE;
-        Color rosado = Color.decode("#D87093");
-        Color grisTexto = Color.decode("#708090");
+    public MenuEstudiante(Sistema sistema, Usuario estudiante) {
+        this.sistema = sistema;
+        this.estudiante = estudiante;
 
-        setTitle("Menu Estudiante");
-        setSize(400, 300);
+        setTitle("Menú Estudiante");
+        setSize(400, 500);
         setLayout(null);
-        getContentPane().setBackground(fondoBlanco);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getContentPane().setBackground(Color.WHITE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        JLabel lblTitulo = new JLabel("Bienvenido Estudiante: " + usuario.getNombre());
-        lblTitulo.setBounds(60, 30, 300, 25);
-        lblTitulo.setForeground(grisTexto);
-        add(lblTitulo);
+        // Título
+        JLabel titulo = new JLabel("Estudiante: " + estudiante.getNombre(), SwingConstants.CENTER);
+        titulo.setBounds(50, 20, 300, 30);
+        titulo.setFont(new Font("Arial", Font.BOLD, 20));
+        titulo.setForeground(grisTexto);
+        add(titulo);
 
-        JButton btnVerCursos = new JButton("Ver Cursos");
-        btnVerCursos.setBounds(110, 100, 160, 30);
-        btnVerCursos.setBackground(rosado);
-        btnVerCursos.setForeground(Color.WHITE);
-        btnVerCursos.setFocusPainted(false);
-        add(btnVerCursos);
+        // Botones
+        JButton btnCursos = crearBoton("Ver Cursos", 100);
+        JButton btnNotas = crearBoton("Ver Mis Notas", 160);
+        JButton btnSalir = crearBoton("Cerrar Sesión", 220);
+
+        add(btnCursos); add(btnNotas); add(btnSalir);
+
+        // Acciones
+        btnCursos.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, sistema.obtenerListaCursos());
+        });
+
+        btnNotas.addActionListener(e -> {
+            String notas = sistema.obtenerNotasPorEstudiante(estudiante.getCodigo());
+            JOptionPane.showMessageDialog(this, notas);
+        });
+
+        btnSalir.addActionListener(e -> {
+            new Login(sistema);
+            dispose();
+        });
 
         setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    // Método auxiliar para crear botones uniformes
+    private JButton crearBoton(String texto, int y) {
+        JButton btn = new JButton(texto);
+        btn.setBounds(50, y, 300, 40);
+        btn.setBackground(rosado);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setFont(new Font("Arial", Font.BOLD, 14));
+        return btn;
     }
 }

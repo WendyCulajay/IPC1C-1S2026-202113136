@@ -1,105 +1,92 @@
 package Vista;
 
-import Modelo.Usuario;
 import Controlador.Sistema;
+import Modelo.Usuario;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class Login extends JFrame {
 
-    private Sistema sistema;
+    private final Sistema sistema;
 
     public Login(Sistema sistema) {
         this.sistema = sistema;
 
-     
-        Color fondoBlanco = Color.WHITE;
-        Color rosado = Color.decode("#D87093");
-        Color grisTexto = Color.decode("#708090");
-
-        setTitle("Login - Sancarlista Academy");
-        setSize(500, 450); // Aumentado un poco para el combo box
+        setTitle("Sancarlista Academy - Login");
+        setSize(400, 350);
         setLayout(null);
-        getContentPane().setBackground(fondoBlanco);
+        getContentPane().setBackground(Color.WHITE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        int x = 150;
+        // Colores corporativos
+        Color rosado = new Color(216, 112, 147); 
+        Color gris = new Color(112, 128, 144);
 
-        // Etiqueta de Codigo
-        JLabel lblCodigo = new JLabel("Código:");
-        lblCodigo.setBounds(x, 40, 100, 25);
-        lblCodigo.setForeground(grisTexto);
-        add(lblCodigo);
+        // Título
+        JLabel lblTitulo = new JLabel("Iniciar Sesión", SwingConstants.CENTER);
+        lblTitulo.setBounds(50, 20, 300, 30);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitulo.setForeground(gris);
+        add(lblTitulo);
 
+        // Campos
         JTextField txtCodigo = new JTextField();
-        txtCodigo.setBounds(x, 65, 200, 25);
+        txtCodigo.setBounds(100, 80, 200, 40);
+        txtCodigo.setBorder(BorderFactory.createTitledBorder("Código"));
         add(txtCodigo);
 
-        // Etiqueta de Password
-        JLabel lblPassword = new JLabel("Password:");
-        lblPassword.setBounds(x, 105, 100, 25);
-        lblPassword.setForeground(grisTexto);
-        add(lblPassword);
-
         JPasswordField txtPassword = new JPasswordField();
-        txtPassword.setBounds(x, 130, 200, 25);
+        txtPassword.setBounds(100, 140, 200, 40);
+        txtPassword.setBorder(BorderFactory.createTitledBorder("Password"));
         add(txtPassword);
 
-        // Opcion de Rol: Seleccionar Rol 
-        JLabel lblRol = new JLabel("Entrar como:");
-        lblRol.setBounds(x, 170, 100, 25);
-        lblRol.setForeground(grisTexto);
-        add(lblRol);
-
-        String[] roles = {"Administrador", "Instructor", "Estudiante"};
-        JComboBox<String> cbRoles = new JComboBox<>(roles);
-        cbRoles.setBounds(x, 195, 200, 25);
-        cbRoles.setBackground(Color.WHITE);
-        add(cbRoles);
-
-        // Boton Login
+        // Botón Login
         JButton btnLogin = new JButton("Ingresar");
-        btnLogin.setBounds(x + 40, 250, 120, 35);
+        btnLogin.setBounds(100, 210, 200, 40);
         btnLogin.setBackground(rosado);
         btnLogin.setForeground(Color.WHITE);
         btnLogin.setFocusPainted(false);
         add(btnLogin);
 
+        // ================= LOGIN =================
         btnLogin.addActionListener(e -> {
-            String codigo = txtCodigo.getText();
-            String password = new String(txtPassword.getPassword());
-            String rolSeleccionado = (String) cbRoles.getSelectedItem();
+            String codigo = txtCodigo.getText().trim();
+            String password = new String(txtPassword.getPassword()).trim();
 
-            // 1. Se busca si el usuario existe y la clave es correcta
+            if (codigo.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Campos vacíos");
+                return;
+            }
+
             Usuario u = sistema.login(codigo, password);
 
             if (u != null) {
-                // 2. Validacion de Rol: Se comprueba si el rol real coincide con el seleccionado
-                if (u.getRol().equalsIgnoreCase(rolSeleccionado)) {
-                    
-                    // Redireccion segun rol
-                    if (rolSeleccionado.equals("Administrador")) {
-                        new MenuAdmin(u).setVisible(true);
-                    } else if (rolSeleccionado.equals("Estudiante")) {
-                        new MenuEstudiante(u).setVisible(true);
-                    } else if (rolSeleccionado.equals("Instructor")) {
-                        new MenuInstructor(u).setVisible(true);
-                    }
-                    
-                    this.dispose(); // Cerrar login
-                    
-                } else {
-                    // Si el usuario existe pero eligio un rol que no le pertenece
-                    JOptionPane.showMessageDialog(this, 
-                        "Acceso Denegado: Usted no tiene permisos de " + rolSeleccionado, 
-                        "Error de Rol", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Bienvenido " + u.getNombre());
+
+                // 🔥 POLIMORFISMO: abrir menú según rol
+                switch (u.getRol().toLowerCase()) {
+                    case "administrador":
+                        new MenuAdmin(sistema).setVisible(true);
+                        break;
+                    case "instructor":
+                        new MenuInstructor(sistema, u).setVisible(true);
+                        break;
+                    case "estudiante":
+                        new MenuEstudiante(sistema, u).setVisible(true);
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(this, "Rol desconocido");
+                        break;
                 }
 
+                this.dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Código o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Credenciales incorrectas");
             }
         });
 
         setLocationRelativeTo(null);
+        setVisible(true);
     }
 }

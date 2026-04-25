@@ -1,34 +1,38 @@
 package Modelo;
+import java.io.Serializable;
 
-public class Usuario {
+public class Usuario implements Serializable {
+    private String codigo;
+    private String nombre;
+    private String password;
+    private String rol;
+    private String carnet;
 
-    protected String codigo;
-    protected String nombre;
-    protected String password;
-    protected String fechaNacimiento;
-    protected String genero;
-
-    public Usuario(String codigo, String nombre, String password, String fechaNacimiento, String genero) {
+    // Constructor 
+    public Usuario(String codigo, String nombre, String password, String rol) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.password = password;
-        this.fechaNacimiento = fechaNacimiento;
-        this.genero = genero;
+        this.rol = rol;
     }
 
-    public String getCodigo() {
-        return codigo;
+    // --- GETTERS ---
+    public String getCodigo() { return codigo; }
+    public String getNombre() { return nombre; }
+    public String getPassword() { return password; }
+    public String getRol() { return rol; }
+    public String getCarnet() { return carnet; }
+
+    // --- SETTERS (¡Estos son obligatorios para poder actualizar datos!) ---
+    public void setNombre(String nombre) { 
+        this.nombre = nombre; 
     }
 
-    public String getNombre() {
-        return nombre;
+    public void setPassword(String password) { 
+        this.password = password; 
     }
 
-    public boolean login(String codigo, String password) {
-        return this.codigo.equals(codigo) && this.password.equals(password);
-    }
-
-    public String getRol() {
-        return "Usuario";
+    public void setCarnet(String carnet) { 
+        this.carnet = carnet; 
     }
 }

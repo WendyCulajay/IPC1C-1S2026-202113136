@@ -1,16 +1,32 @@
 package Modelo;
 
-public class Instructor extends Usuario {
+import java.io.Serializable;
 
-    private String especialidad;
+public class Instructor extends Usuario implements Serializable {
 
-    public Instructor(String codigo, String nombre, String password, String fechaNacimiento, String genero, String especialidad) {
-        super(codigo, nombre, password, fechaNacimiento, genero);
-        this.especialidad = especialidad;
+    private String genero;
+    private String fechaNacimiento;
+
+    public Instructor(String codigo, String nombre, String password,
+                      String genero, String fechaNacimiento) {
+        // El rol siempre será "Instructor"
+        super(codigo, nombre, password, "Instructor");
+        this.genero = genero;
+        this.fechaNacimiento = fechaNacimiento;
     }
 
+    // Getters
+    public String getGenero() { return genero; }
+    public String getFechaNacimiento() { return fechaNacimiento; }
+
+    // Setters
+    public void setGenero(String genero) { this.genero = genero; }
+    public void setFechaNacimiento(String fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
+
     @Override
-    public String getRol() {
-        return "Instructor";
+    public String toString() {
+        return getCodigo() + " - " + getNombre() +
+               " - Género: " + genero +
+               " - Fecha Nac: " + fechaNacimiento;
     }
 }

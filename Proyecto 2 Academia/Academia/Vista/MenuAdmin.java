@@ -1,67 +1,79 @@
 package Vista;
 
-import Modelo.Usuario;
+import Controlador.Sistema;
 import javax.swing.*;
 import java.awt.*;
 
 public class MenuAdmin extends JFrame {
 
-    public MenuAdmin(Usuario usuario) {
-        
-        Color fondoBlanco = Color.WHITE;
-        Color rosado = Color.decode("#D87093");
-        Color grisTexto = Color.decode("#708090");
+    private final Sistema sistema;
+    private final Color rosado = new Color(216, 112, 147);
+    private final Color grisTexto = new Color(112, 128, 144);
 
-        setTitle("Sancarlista Academy - Panel de Administración");
-        setSize(500, 500);
+    public MenuAdmin(Sistema sistema) {
+        this.sistema = sistema;
+
+        setTitle("Menú Administrador");
+        setSize(400, 600);
         setLayout(null);
-        getContentPane().setBackground(fondoBlanco);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getContentPane().setBackground(Color.WHITE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Encabezado
-        JLabel lblTitulo = new JLabel("Bienvenido: " + usuario.getNombre());
-        lblTitulo.setBounds(50, 20, 400, 30);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
-        lblTitulo.setForeground(grisTexto);
-        add(lblTitulo);
+        // Título
+        JLabel titulo = new JLabel("Administrador", SwingConstants.CENTER);
+        titulo.setBounds(50, 20, 300, 30);
+        titulo.setFont(new Font("Arial", Font.BOLD, 22));
+        titulo.setForeground(grisTexto);
+        add(titulo);
 
-        // Botones de Gestion  
-        
-        JButton btnInstructores = crearBoton("Gestión de Instructores", 80, rosado);
-        add(btnInstructores);
+        // Botones
+        JButton btnEst = crearBoton("Gestionar Estudiantes", 80);
+        JButton btnInst = crearBoton("Gestionar Instructores", 130);
+        JButton btnCursos = crearBoton("Gestionar Cursos", 180);
+        JButton btnSecciones = crearBoton("Gestionar Secciones", 230);
+        JButton btnNotas = crearBoton("Asignar Notas", 280);
+        JButton btnSalir = crearBoton("Cerrar Sesión", 350);
 
-        JButton btnEstudiantes = crearBoton("Gestión de Estudiantes", 140, rosado);
-        add(btnEstudiantes);
+        add(btnEst); add(btnInst); add(btnCursos);
+        add(btnSecciones); add(btnNotas); add(btnSalir);
 
-        JButton btnCursos = crearBoton("Gestión de Cursos", 200, rosado);
-        add(btnCursos);
+        // Acciones
+        btnEst.addActionListener(e -> new GestionEstudiantes(sistema));
+        btnInst.addActionListener(e -> new GestionInstructores(sistema));
+        btnCursos.addActionListener(e -> new GestionCursos(sistema));
+        btnSecciones.addActionListener(e -> new GestionarSecciones(sistema));
 
-        JButton btnSecciones = crearBoton("Gestión de Secciones", 260, rosado);
-        add(btnSecciones);
+        btnNotas.addActionListener(e -> {
+            String est = JOptionPane.showInputDialog(this, "Código Estudiante:");
+            String cur = JOptionPane.showInputDialog(this, "Código Curso:");
+            String val = JOptionPane.showInputDialog(this, "Nota:");
 
-        // Boton Cerrar Sesion 
-        JButton btnLogout = new JButton("Cerrar Sesión");
-        btnLogout.setBounds(150, 360, 200, 35);
-        btnLogout.setBackground(Color.DARK_GRAY);
-        btnLogout.setForeground(Color.WHITE);
-        btnLogout.addActionListener(e -> {
-            // Ventana de Login
-            JOptionPane.showMessageDialog(this, "Sesión cerrada correctamente.");
-            this.dispose(); 
+            try {
+                String r = sistema.asignarNota(est, cur, Double.parseDouble(val));
+                JOptionPane.showMessageDialog(this, r);
+                sistema.guardarDatos();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error en datos");
+            }
         });
-        add(btnLogout);
+
+        btnSalir.addActionListener(e -> {
+            new Login(sistema);
+            dispose();
+        });
 
         setLocationRelativeTo(null);
+        setVisible(true);
     }
 
-    // Metodo para estandarizar la creación de botones
-    private JButton crearBoton(String texto, int y, Color color) {
-        JButton boton = new JButton(texto);
-        boton.setBounds(100, y, 300, 40);
-        boton.setBackground(color);
-        boton.setForeground(Color.WHITE);
-        boton.setFocusPainted(false);
-        boton.setFont(new Font("Arial", Font.BOLD, 13));
-        return boton;
+    // Método auxiliar para crear botones uniformes
+    private JButton crearBoton(String texto, int y) {
+        JButton btn = new JButton(texto);
+        btn.setBounds(50, y, 300, 40);
+        btn.setBackground(rosado);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setFont(new Font("Arial", Font.BOLD, 14));
+        return btn;
     }
 }

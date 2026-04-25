@@ -1,47 +1,39 @@
 package Modelo;
 
-// Clase que representa un curso dentro del sistema
-public class Curso {
+import java.io.Serializable;
+
+public class Curso implements Serializable {
 
     private String codigo;
     private String nombre;
+    private String descripcion;
     private int creditos;
 
-    // Constructor
-    public Curso(String codigo, String nombre, int creditos) {
+    public Curso(String codigo, String nombre, String descripcion, int creditos) {
         this.codigo = codigo;
         this.nombre = nombre;
+        this.descripcion = descripcion;
         this.creditos = creditos;
     }
 
-    // Getters y setters
+    // Getters
+    public String getCodigo() { return codigo; }
+    public String getNombre() { return nombre; }
+    public String getDescripcion() { return descripcion; }
+    public int getCreditos() { return creditos; }
 
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public int getCreditos() {
-        return creditos;
-    }
-
+    // Setters
+    public void setCodigo(String codigo) { this.codigo = codigo; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
     public void setCreditos(int creditos) {
-        this.creditos = creditos;
+        if (creditos >= 0) { 
+            this.creditos = creditos;
+        }
     }
 
-    // Mostrar información básica del curso
-    public String mostrarInfo() {
-        return "Curso: " + nombre + " | Codigo: " + codigo + " | Creditos: " + creditos;
+    @Override
+    public String toString() {
+        return codigo + " - " + nombre + " (" + creditos + " créditos) | " + descripcion;
     }
-} 
+}

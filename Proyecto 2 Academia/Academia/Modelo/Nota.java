@@ -1,49 +1,21 @@
 package Modelo;
+import java.io.Serializable;
 
-// Clase que representa una nota de un estudiante en un curso
-public class Nota {
-
+public class Nota implements Serializable {
+    private String codigoEstudiante;
     private String codigoCurso;
-    private String carnetEstudiante;
-    private double nota;
+    private double valor;
 
-    // Constructor
-    public Nota(String codigoCurso, String carnetEstudiante, double nota) {
+    public Nota(String codigoEstudiante, String codigoCurso, double valor) {
+        this.codigoEstudiante = codigoEstudiante;
         this.codigoCurso = codigoCurso;
-        this.carnetEstudiante = carnetEstudiante;
-        this.nota = nota;
+        this.valor = valor;
     }
 
-    // Getters y setters
+    // Métodos para que el  Sistema  funcione correctamente
+    public void setValor(double valor) { this.valor = valor; }
+    public double getValor() { return valor; }
 
-    public String getCodigoCurso() {
-        return codigoCurso;
-    }
-
-    public void setCodigoCurso(String codigoCurso) {
-        this.codigoCurso = codigoCurso;
-    }
-
-    public String getCarnetEstudiante() {
-        return carnetEstudiante;
-    }
-
-    public void setCarnetEstudiante(String carnetEstudiante) {
-        this.carnetEstudiante = carnetEstudiante;
-    }
-
-    public double getNota() {
-        return nota;
-    }
-
-    public void setNota(double nota) {
-        this.nota = nota;
-    }
-
-    // Mostrar información
-    public String mostrarInfo() {
-        return "Curso: " + codigoCurso +
-               " | Estudiante: " + carnetEstudiante +
-               " | Nota: " + nota;
-    }
+    public String getCodigoEstudiante() { return codigoEstudiante; }
+    public String getCodigoCurso() { return codigoCurso; }
 }
